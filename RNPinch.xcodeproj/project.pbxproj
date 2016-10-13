@@ -48,6 +48,7 @@
 				DA08C4AB1DAF39C600714E34 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		DA08C4AB1DAF39C600714E34 /* Products */ = {
 			isa = PBXGroup;
