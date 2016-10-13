@@ -51,3 +51,7 @@ xcuserdata
 # Carthage/Checkouts
 
 Carthage/Build
+
+# ignore visual studio code
+.vscode
+tsConfig.json

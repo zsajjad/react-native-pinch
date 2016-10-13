@@ -3,9 +3,9 @@
 import { NativeModules } from 'react-native';
 
 var RNPinch = {
-	me: function (url, obj, callback){
+	fetch: function (url, obj, callback){
 		NativeModules.RNPinch.fetch(url, obj, (err, res) => {
-
+			callback(err, res);
 		});
 	}
 };
