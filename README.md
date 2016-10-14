@@ -16,12 +16,10 @@ yarn add react-native-pinch
 
 ## Pinch API
 
-### Request Schema
-
-Requests can be made by using the `fetch(url[, config, [callback]])` method of Pinch.
-
 ## Example
 *Examples are using the ES6 standard*
+
+Requests can be made by using the `fetch(url[, config, [callback]])` method of Pinch.
 
 ### Using Promises
 ```javascript
