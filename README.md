@@ -20,7 +20,7 @@ Before you can make requests using SSL pinning, you first need to add your `.cer
 
 ### Android
 
- - Place your `.cer` files under `src/main/assets/`.
+ - Place your `.cer` file under `src/main/assets/`.
 
 ### iOS
 
