@@ -96,8 +96,18 @@ RCT_EXPORT_METHOD(fetch:(NSString *)url obj:(NSDictionary *)obj callback:(RCTRes
         if (obj[@"timeoutInterval"]) {
             request.timeoutInterval = [obj[@"timeoutInterval"] doubleValue];
         }
-        if (obj[@"headers"]) {
-            [request setAllHTTPHeaderFields:obj[@"headers"]];
+        if (obj[@"headers"] && [obj[@"headers"] isKindOfClass:[NSDictionary class]]) {
+            NSMutableDictionary *m = [obj[@"headers"] mutableCopy];
+            for (NSString *key in [m allKeys]) {
+                if (![m[key] isKindOfClass:[NSString class]]) {
+                    m[key] = [m[key] stringValue];
+                }
+            }
+            [request setAllHTTPHeaderFields:m];
+        }
+        if (obj[@"body"]) {
+            NSData *data = [obj[@"body"] dataUsingEncoding:NSUTF8StringEncoding];
+            [request setHTTPBody:data];
         }
     }
     if (obj && obj[@"sslPinning"] && obj[@"sslPinning"][@"cert"]) {
