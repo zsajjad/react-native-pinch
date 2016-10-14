@@ -1,4 +1,4 @@
-package com.medipass.pinch.utils;
+package com.localz.pinch.utils;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

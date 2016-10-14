@@ -1,4 +1,4 @@
-package com.medipass.pinch.utils;
+package com.localz.pinch.utils;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;

@@ -1,11 +1,11 @@
-package com.medipass.pinch.utils;
+package com.localz.pinch.utils;
 
 import android.util.Log;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
-import com.medipass.pinch.models.HttpRequest;
-import com.medipass.pinch.models.HttpResponse;
+import com.localz.pinch.models.HttpRequest;
+import com.localz.pinch.models.HttpResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;

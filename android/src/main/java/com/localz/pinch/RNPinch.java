@@ -1,4 +1,4 @@
-package com.medipass.pinch;
+package com.localz.pinch;
 
 import android.util.Log;
 
@@ -12,10 +12,10 @@ import com.facebook.react.bridge.ReadableMap;
 
 import com.facebook.react.bridge.UnexpectedNativeTypeException;
 import com.facebook.react.bridge.WritableMap;
-import com.medipass.pinch.models.HttpRequest;
-import com.medipass.pinch.models.HttpResponse;
-import com.medipass.pinch.utils.HttpUtil;
-import com.medipass.pinch.utils.JsonUtil;
+import com.localz.pinch.models.HttpRequest;
+import com.localz.pinch.models.HttpResponse;
+import com.localz.pinch.utils.HttpUtil;
+import com.localz.pinch.utils.JsonUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package com.medipass.pinch.models;
+package com.localz.pinch.models;
 
 import org.json.JSONObject;
 
