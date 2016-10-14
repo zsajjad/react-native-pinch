@@ -14,7 +14,16 @@ Using Yarn:
 yarn add react-native-pinch
 ```
 
-## Pinch API
+## Adding certificates
+
+Before you can make requests using SSL pinning, you first need to add your `.cer` files to your project's assets.
+
+### Android
+
+ - Place your `.cer` files under `src/main/assets/`.
+
+### iOS
+
 
 ## Example
 *Examples are using the ES6 standard*
