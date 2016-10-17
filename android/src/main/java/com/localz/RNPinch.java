@@ -72,7 +72,7 @@ public class RNPinch extends ReactContextBaseJavaModule {
             HttpRequest request = new HttpRequest(endpoint);
 
             if (opts.hasKey(OPT_BODY_KEY)) {
-                request.body = JsonUtil.convertReadableMapToJson(opts.getMap(OPT_BODY_KEY)).toString();
+                request.body = opts.getString(OPT_BODY_KEY);
             }
             if (opts.hasKey(OPT_METHOD_KEY)) {
                 request.method = opts.getString(OPT_METHOD_KEY);
