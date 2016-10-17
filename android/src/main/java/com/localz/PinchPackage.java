@@ -5,7 +5,7 @@ import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
-import com.localz.pinch.RNPinch;
+import com.localz.RNPinch;
 
 import java.util.ArrayList;
 import java.util.Collections;
