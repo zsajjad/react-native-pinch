@@ -1,4 +1,4 @@
-package com.localz.pinch;
+package com.localz;
 
 import android.util.Log;
 import android.content.pm.PackageManager;

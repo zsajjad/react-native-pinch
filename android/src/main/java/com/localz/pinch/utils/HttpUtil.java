@@ -59,13 +59,15 @@ public class HttpUtil {
     }
 
     private HttpsURLConnection prepareRequestHeaders(HttpsURLConnection connection, ReadableMap headers) {
-        ReadableMapKeySetIterator iterator = headers.keySetIterator();
-
         connection.setRequestProperty("Content-Type", DEFAULT_CONTENT_TYPE);
         connection.setRequestProperty("Accept", DEFAULT_CONTENT_TYPE);
-        while (iterator.hasNextKey()) {
-            String nextKey = iterator.nextKey();
-            connection.setRequestProperty(nextKey, headers.getString(nextKey));
+
+        if (headers != null) {
+            ReadableMapKeySetIterator iterator = headers.keySetIterator();
+            while (iterator.hasNextKey()) {
+                String nextKey = iterator.nextKey();
+                connection.setRequestProperty(nextKey, headers.getString(nextKey));
+            }
         }
 
         return connection;
