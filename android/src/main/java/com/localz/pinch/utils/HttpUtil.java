@@ -77,12 +77,13 @@ public class HttpUtil {
             throws IOException, KeyStoreException, CertificateException, KeyManagementException, NoSuchAlgorithmException, JSONException {
         HttpsURLConnection connection;
         URL url = new URL(request.endpoint);
+        String method = request.method.toUpperCase();
 
         connection = (HttpsURLConnection) url.openConnection();
         if (request.certFilename != null) {
             connection.setSSLSocketFactory(KeyPinStoreUtil.getInstance(request.certFilename).getContext().getSocketFactory());
         }
-        connection.setRequestMethod(request.method.toUpperCase());
+        connection.setRequestMethod(method);
 
         connection = prepareRequestHeaders(connection, request.headers);
 
@@ -91,7 +92,7 @@ public class HttpUtil {
         connection.setConnectTimeout(request.timeout);
         connection.setReadTimeout(request.timeout);
 
-        if (request.body != null && (request.method.equals("post") || request.method.equals("put"))) {
+        if (request.body != null && (method.equals("POST") || method.equals("PUT"))) {
             // Set the content length of the body.
             connection.setRequestProperty("Content-length", request.body.getBytes().length + "");
             connection.setDoInput(true);
