@@ -37,10 +37,7 @@ import pinch from 'react-native-pinch';
 pinch.fetch('https://my-api.com/v1/endpoint', {
   method: 'post',
   headers: { customHeader: 'customValue' },
-  body: {
-    firstName: 'Jake',
-    lastName: 'Moxey'
-  }, 
+  body: '{"firstName": "Jake", "lastName": "Moxey"}', 
   sslPinning: {
     cert: 'my-cool-cert'
   }
@@ -56,10 +53,7 @@ import pinch from 'react-native-pinch';
 pinch.fetch('https://my-api.com/v1/endpoint', {
   method: 'post',
   headers: { customHeader: 'customValue' },
-  body: {
-    firstName: 'Jake',
-    lastName: 'Moxey'
-  }, 
+  body: '{"firstName": "Jake", "lastName": "Moxey"}', 
   sslPinning: {
     cert: 'my-cool-cert'
   }
