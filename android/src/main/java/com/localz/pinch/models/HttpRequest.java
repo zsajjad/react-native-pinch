@@ -10,10 +10,15 @@ public class HttpRequest {
     public String certFilename;
     public int timeout;
 
-    public HttpRequest() {}
+    private static final int DEFAULT_TIMEOUT = 10000;
+
+    public HttpRequest() {
+        this.timeout = DEFAULT_TIMEOUT;
+    }
 
     public HttpRequest(String endpoint) {
         this.endpoint = endpoint;
+        this.timeout = DEFAULT_TIMEOUT;
     }
 
     public HttpRequest(String endpoint, String method, ReadableMap headers, String body, String certFilename, int timeout) {

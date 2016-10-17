@@ -32,6 +32,7 @@ public class RNPinch extends ReactContextBaseJavaModule {
     private static final String OPT_HEADER_KEY = "headers";
     private static final String OPT_BODY_KEY = "body";
     private static final String OPT_SSL_PINNING_KEY = "sslPinning";
+    private static final String OPT_TIMEOUT_KEY = "timeoutInterval";
 
     private HttpUtil httpUtil;
 
@@ -62,6 +63,9 @@ public class RNPinch extends ReactContextBaseJavaModule {
             }
             if (opts.hasKey(OPT_SSL_PINNING_KEY)) {
                 request.certFilename = opts.getMap(OPT_SSL_PINNING_KEY).getString("cert");
+            }
+            if (opts.hasKey(OPT_TIMEOUT_KEY)) {
+                request.timeout = opts.getInt(OPT_TIMEOUT_KEY);
             }
 
             HttpResponse httpResponse = httpUtil.sendHttpRequest(request);
