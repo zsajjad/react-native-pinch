@@ -39,6 +39,10 @@ public class RNPinch extends ReactContextBaseJavaModule {
     private static final String OPT_TIMEOUT_KEY = "timeoutInterval";
 
     private HttpUtil httpUtil;
+    private String packageName = null;
+    private String displayName = null;
+    private String version = null;
+    private String versionCode = null;
 
     public RNPinch(ReactApplicationContext reactContext) {
         super(reactContext);
