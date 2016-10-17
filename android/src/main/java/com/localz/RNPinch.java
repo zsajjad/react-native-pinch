@@ -78,7 +78,7 @@ public class RNPinch extends ReactContextBaseJavaModule {
                 request.method = opts.getString(OPT_METHOD_KEY);
             }
             if (opts.hasKey(OPT_HEADER_KEY)) {
-                request.headers = opts.getMap(OPT_HEADER_KEY);
+                request.headers = JsonUtil.convertReadableMapToJson(opts.getMap(OPT_HEADER_KEY));
             }
             if (opts.hasKey(OPT_SSL_PINNING_KEY)) {
                 request.certFilename = opts.getMap(OPT_SSL_PINNING_KEY).getString("cert");
@@ -98,6 +98,7 @@ public class RNPinch extends ReactContextBaseJavaModule {
             callback.invoke(null, response);
         } catch(JSONException | IOException | UnexpectedNativeTypeException | KeyStoreException | CertificateException | KeyManagementException | NoSuchAlgorithmException e) {
             Log.e("RNPinch", "Error: " + e);
+            e.printStackTrace();
             callback.invoke(e.toString(), null);
         }
     }
