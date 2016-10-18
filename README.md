@@ -14,11 +14,6 @@ Using Yarn:
 yarn add react-native-pinch
 ```
 
-Link the module to your React Native project:
-```
-rnpm link react-native-pinch
-```
-
 ## Automatically link
 
 #### With React Native 0.27+
