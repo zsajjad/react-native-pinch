@@ -14,6 +14,99 @@ Using Yarn:
 yarn add react-native-pinch
 ```
 
+Link the module to your React Native project:
+```
+rnpm link react-native-pinch
+```
+
+## Automatically link
+
+#### With React Native 0.27+
+
+```shell
+react-native link react-native-pinch
+```
+
+#### With older versions of React Native
+
+You need [`rnpm`](https://github.com/rnpm/rnpm) (`npm install -g rnpm`)
+
+```shell
+rnpm link react-native-pinch
+```
+
+## Manually link
+
+### iOS (via Cocoa Pods)
+Add the following line to your build targets in your `Podfile`
+
+`pod 'RNPinch', :path => '../node_modules/react-native-pinch'`
+
+Then run `pod install`
+
+### Android
+
+- in `android/app/build.gradle`:
+
+```diff
+dependencies {
+    ...
+    compile "com.facebook.react:react-native:+"  // From node_modules
++   compile project(':react-native-pinch')
+}
+```
+
+- in `android/settings.gradle`:
+
+```diff
+...
+include ':app'
++ include ':react-native-pinch'
++ project(':react-native-pinch').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-pinch/android')
+```
+
+#### With React Native 0.29+
+
+- in `MainApplication.java`:
+
+```diff
++ import com.localz.PinchPackage;
+
+  public class MainApplication extends Application implements ReactApplication {
+    //......
+
+    @Override
+    protected List<ReactPackage> getPackages() {
+      return Arrays.<ReactPackage>asList(
++         new PinchPackage(),
+          new MainReactPackage()
+      );
+    }
+
+    ......
+  }
+```
+
+#### With older versions of React Native:
+
+- in `MainActivity.java`:
+
+```diff
++ import com.localz.PinchPackage;
+
+  public class MainActivity extends ReactActivity {
+    ......
+
+    @Override
+    protected List<ReactPackage> getPackages() {
+      return Arrays.<ReactPackage>asList(
++       new PinchPackage(),
+        new MainReactPackage()
+      );
+    }
+  }
+```
+
 ## Adding certificates
 
 Before you can make requests using SSL pinning, you first need to add your `.cer` files to your project's assets.
@@ -37,7 +130,7 @@ import pinch from 'react-native-pinch';
 pinch.fetch('https://my-api.com/v1/endpoint', {
   method: 'post',
   headers: { customHeader: 'customValue' },
-  body: '{"firstName": "Jake", "lastName": "Moxey"}', 
+  body: '{"firstName": "Jake", "lastName": "Moxey"}',
   sslPinning: {
     cert: 'my-cool-cert'
   }
@@ -53,7 +146,7 @@ import pinch from 'react-native-pinch';
 pinch.fetch('https://my-api.com/v1/endpoint', {
   method: 'post',
   headers: { customHeader: 'customValue' },
-  body: '{"firstName": "Jake", "lastName": "Moxey"}', 
+  body: '{"firstName": "Jake", "lastName": "Moxey"}',
   sslPinning: {
     cert: 'my-cool-cert'
   }
@@ -70,11 +163,11 @@ pinch.fetch('https://my-api.com/v1/endpoint', {
 ```javascript
 {
   bodyString: '',
-  
+
   headers: {},
-  
+
   status: 200,
-  
+
   statusText: 'OK'
 }
 ```
