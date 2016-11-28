@@ -119,19 +119,22 @@ RCT_EXPORT_METHOD(fetch:(NSString *)url obj:(NSDictionary *)obj callback:(RCTRes
     
     __block NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (!error) {
-            NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
-            NSInteger statusCode = httpResp.statusCode;
-            NSString *bodyString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            
-            NSDictionary *res = @{
-                                  @"status": @(statusCode),
-                                  @"headers": httpResp.allHeaderFields,
-                                  @"bodyString": bodyString
-                                  };
-            callback(@[[NSNull null], res]);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
+                NSInteger statusCode = httpResp.statusCode;
+                NSString *bodyString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                
+                NSDictionary *res = @{
+                                      @"status": @(statusCode),
+                                      @"headers": httpResp.allHeaderFields,
+                                      @"bodyString": bodyString
+                                      };
+                callback(@[[NSNull null], res]);
+            });
         } else {
-            
-            callback(@[@{@"message":error.localizedDescription}, [NSNull null]]);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                callback(@[@{@"message":error.localizedDescription}, [NSNull null]]);
+            });
         }
     }];
     
