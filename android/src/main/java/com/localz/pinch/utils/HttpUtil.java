@@ -2,7 +2,6 @@ package com.localz.pinch.utils;
 
 import android.util.Log;
 
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.localz.pinch.models.HttpRequest;
 import com.localz.pinch.models.HttpResponse;
@@ -20,6 +19,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -58,38 +58,41 @@ public class HttpUtil {
         return jsonHeaders;
     }
 
-    private HttpsURLConnection prepareRequestHeaders(HttpsURLConnection connection, ReadableMap headers) {
-        ReadableMapKeySetIterator iterator = headers.keySetIterator();
-
+    private HttpsURLConnection prepareRequestHeaders(HttpsURLConnection connection, JSONObject headers) throws JSONException {
         connection.setRequestProperty("Content-Type", DEFAULT_CONTENT_TYPE);
         connection.setRequestProperty("Accept", DEFAULT_CONTENT_TYPE);
-        while (iterator.hasNextKey()) {
-            String nextKey = iterator.nextKey();
-            connection.setRequestProperty(nextKey, headers.getString(nextKey));
+
+        if (headers != null) {
+            Iterator<String> iterator = headers.keys();
+            while (iterator.hasNext()) {
+                String nextKey = iterator.next();
+                connection.setRequestProperty(nextKey, headers.get(nextKey).toString());
+            }
         }
 
         return connection;
     }
 
     private HttpsURLConnection prepareRequest(HttpRequest request)
-            throws IOException, KeyStoreException, CertificateException, KeyManagementException, NoSuchAlgorithmException {
+            throws IOException, KeyStoreException, CertificateException, KeyManagementException, NoSuchAlgorithmException, JSONException {
         HttpsURLConnection connection;
         URL url = new URL(request.endpoint);
+        String method = request.method.toUpperCase();
 
         connection = (HttpsURLConnection) url.openConnection();
         if (request.certFilename != null) {
             connection.setSSLSocketFactory(KeyPinStoreUtil.getInstance(request.certFilename).getContext().getSocketFactory());
         }
-        connection.setRequestMethod(request.method.toUpperCase());
+        connection.setRequestMethod(method);
 
         connection = prepareRequestHeaders(connection, request.headers);
 
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         connection.setAllowUserInteraction(false);
-        connection.setConnectTimeout(10000);
-        connection.setReadTimeout(10000);
+        connection.setConnectTimeout(request.timeout);
+        connection.setReadTimeout(request.timeout);
 
-        if (request.body != null && (request.method.equals("post") || request.method.equals("put"))) {
+        if (request.body != null && (method.equals("POST") || method.equals("PUT"))) {
             // Set the content length of the body.
             connection.setRequestProperty("Content-length", request.body.getBytes().length + "");
             connection.setDoInput(true);
@@ -114,7 +117,7 @@ public class HttpUtil {
     }
 
     public HttpResponse sendHttpRequest(HttpRequest request)
-            throws IOException, KeyStoreException, CertificateException, KeyManagementException, NoSuchAlgorithmException {
+            throws IOException, KeyStoreException, CertificateException, KeyManagementException, NoSuchAlgorithmException, JSONException {
         InputStream responseStream;
         HttpResponse response = new HttpResponse();
         HttpsURLConnection connection;
