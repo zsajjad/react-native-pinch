@@ -118,25 +118,31 @@ public class HttpUtil {
 
     public HttpResponse sendHttpRequest(HttpRequest request)
             throws IOException, KeyStoreException, CertificateException, KeyManagementException, NoSuchAlgorithmException, JSONException {
-        InputStream responseStream;
+        InputStream responseStream = null;
         HttpResponse response = new HttpResponse();
         HttpsURLConnection connection;
         int status;
         String statusText;
 
-        connection = prepareRequest(request);
+        try {
+            connection = prepareRequest(request);
 
-        connection.connect();
+            connection.connect();
 
-        status = connection.getResponseCode();
-        statusText = connection.getResponseMessage();
-        responseStream = prepareResponseStream(connection);
+            status = connection.getResponseCode();
+            statusText = connection.getResponseMessage();
+            responseStream = prepareResponseStream(connection);
 
-        response.statusCode = status;
-        response.statusText = statusText;
-        response.bodyString = getResponseBody(responseStream);
-        response.headers = getResponseHeaders(connection);
+            response.statusCode = status;
+            response.statusText = statusText;
+            response.bodyString = getResponseBody(responseStream);
+            response.headers = getResponseHeaders(connection);
 
-        return response;
+            return response;
+        } finally {
+            if (responseStream != null) {
+                responseStream.close();
+            }
+        }
     }
 }
