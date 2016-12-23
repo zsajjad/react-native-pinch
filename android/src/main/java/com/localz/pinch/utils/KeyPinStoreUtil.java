@@ -11,20 +11,23 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
 public class KeyPinStoreUtil {
 
-    private static KeyPinStoreUtil instance = null;
+    private static HashMap<String, KeyPinStoreUtil> instances = new HashMap<>();
     private SSLContext sslContext = SSLContext.getInstance("TLS");
 
     public static synchronized KeyPinStoreUtil getInstance(String filename) throws CertificateException, IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
-        if (instance == null) {
-            instance = new KeyPinStoreUtil(filename);
+        if (filename != null && instances.get(filename) == null) {
+            instances.put(filename, new KeyPinStoreUtil(filename));
         }
-        return instance;
+        return instances.get(filename);
+
     }
 
     private KeyPinStoreUtil(String filename) throws CertificateException, IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
