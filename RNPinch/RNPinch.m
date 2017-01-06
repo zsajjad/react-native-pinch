@@ -29,7 +29,7 @@
 - (NSArray *)pinnedCertificateData {
     NSString *cerPath = [[NSBundle mainBundle] pathForResource:self.certName ofType:@"cer"];
     NSData *localCertData = [NSData dataWithContentsOfFile:cerPath];
-    
+
     NSMutableArray *pinnedCertificates = [NSMutableArray array];
     for (NSData *certificateData in @[localCertData]) {
         [pinnedCertificates addObject:(__bridge_transfer id)SecCertificateCreateWithData(NULL, (__bridge CFDataRef)certificateData)];
@@ -38,19 +38,19 @@
 }
 
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler {
-    
+
     if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) {
         NSString *domain = challenge.protectionSpace.host;
         SecTrustRef serverTrust = [[challenge protectionSpace] serverTrust];
-        
+
         NSArray *policies = @[(__bridge_transfer id)SecPolicyCreateSSL(true, (__bridge CFStringRef)domain)];
-        
+
         SecTrustSetPolicies(serverTrust, (__bridge CFArrayRef)policies);
         SecTrustSetAnchorCertificates(serverTrust, (__bridge CFArrayRef)self.pinnedCertificateData);
         SecTrustResultType result;
-        
+
         OSStatus errorCode = SecTrustEvaluate(serverTrust, &result);
-        
+
         BOOL evaluatesAsTrusted = (result == kSecTrustResultUnspecified || result == kSecTrustResultProceed);
         if (errorCode == errSecSuccess && evaluatesAsTrusted) {
             NSURLCredential *credential = [NSURLCredential credentialForTrust:serverTrust];
@@ -87,14 +87,14 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(fetch:(NSString *)url obj:(NSDictionary *)obj callback:(RCTResponseSenderBlock)callback) {
     NSURL *u = [NSURL URLWithString:url];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:u];
-    
+
     NSURLSession *session;
     if (obj) {
         if (obj[@"method"]) {
             [request setHTTPMethod:[obj[@"method"] lowercaseString]];
         }
         if (obj[@"timeoutInterval"]) {
-            request.timeoutInterval = [obj[@"timeoutInterval"] doubleValue];
+            request.timeoutInterval = [obj[@"timeoutInterval"] doubleValue] / 1000;
         }
         if (obj[@"headers"] && [obj[@"headers"] isKindOfClass:[NSDictionary class]]) {
             NSMutableDictionary *m = [obj[@"headers"] mutableCopy];
@@ -116,14 +116,14 @@ RCT_EXPORT_METHOD(fetch:(NSString *)url obj:(NSDictionary *)obj callback:(RCTRes
     } else {
         session = [NSURLSession sessionWithConfiguration:self.sessionConfig];
     }
-    
+
     __block NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (!error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
                 NSInteger statusCode = httpResp.statusCode;
                 NSString *bodyString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                
+
                 NSDictionary *res = @{
                                       @"status": @(statusCode),
                                       @"headers": httpResp.allHeaderFields,
@@ -137,9 +137,8 @@ RCT_EXPORT_METHOD(fetch:(NSString *)url obj:(NSDictionary *)obj callback:(RCTRes
             });
         }
     }];
-    
+
     [dataTask resume];
 }
 
 @end
-

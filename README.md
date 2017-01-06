@@ -144,6 +144,7 @@ pinch.fetch('https://my-api.com/v1/endpoint', {
   method: 'post',
   headers: { customHeader: 'customValue' },
   body: '{"firstName": "Jake", "lastName": "Moxey"}',
+  timeoutInterval: 10000 // timeout after 10 seconds
   sslPinning: {
     cert: 'my-cool-cert'
   }
