@@ -20,5 +20,4 @@ var RNPinch = {
     }
 };
 
-
 module.exports =  RNPinch;
