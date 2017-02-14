@@ -69,7 +69,7 @@ public class RNPinch extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void fetch(String endpoint, ReadableMap opts, Callback callback) {
-        new FetchTask(opts, callback).execute(endpoint);
+        new FetchTask(opts, callback).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, endpoint);
     }
 
     private class FetchTask extends AsyncTask<String, Void, WritableMap> {
