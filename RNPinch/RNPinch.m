@@ -91,7 +91,7 @@ RCT_EXPORT_METHOD(fetch:(NSString *)url obj:(NSDictionary *)obj callback:(RCTRes
     NSURLSession *session;
     if (obj) {
         if (obj[@"method"]) {
-            [request setHTTPMethod:[obj[@"method"] lowercaseString]];
+            [request setHTTPMethod:obj[@"method"]];
         }
         if (obj[@"timeoutInterval"]) {
           [request setTimeoutInterval:[obj[@"timeoutInterval"] doubleValue] / 1000];
