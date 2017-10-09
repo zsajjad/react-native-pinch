@@ -9,6 +9,12 @@
 #import "RNPinch.h"
 #import "RCTBridge.h"
 
+@interface RNPinchException : NSException
+@end
+@implementation RNPinchException
+@end
+
+// private delegate for verifying certs
 @interface NSURLSessionSSLPinningDelegate:NSObject <NSURLSessionDelegate>
 
 - (id)initWithCertName:(NSString *)certName;
@@ -28,6 +34,12 @@
 
 - (NSArray *)pinnedCertificateData {
     NSString *cerPath = [[NSBundle mainBundle] pathForResource:self.certName ofType:@"cer"];
+    if (cerPath == nil) {
+        @throw [[RNPinchException alloc]
+            initWithName:@"CertificateError"
+            reason:@"Can not load certicate given, check it's in the app resources."
+            userInfo:nil];
+    }
     NSData *localCertData = [NSData dataWithContentsOfFile:cerPath];
 
     NSMutableArray *pinnedCertificates = [NSMutableArray array];
