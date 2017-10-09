@@ -9,6 +9,11 @@
 #import "RNPinch.h"
 #import "RCTBridge.h"
 
+@interface RNPinchException : NSException
+@end
+@implementation RNPinchException
+@end
+
 // private delegate for verifying certs
 @interface NSURLSessionSSLPinningDelegate:NSObject <NSURLSessionDelegate>
 
@@ -31,6 +36,12 @@
     NSMutableArray *localCertData = [NSMutableArray array];
     for (NSString* certName in self.certNames) {
         NSString *cerPath = [[NSBundle mainBundle] pathForResource:certName ofType:@"cer"];
+        if (cerPath == nil) {
+            @throw [[RNPinchException alloc]
+                initWithName:@"CertificateError"
+                reason:@"Can not load certicate given, check it's in the app resources."
+                userInfo:nil];
+        }
         [localCertData addObject:[NSData dataWithContentsOfFile:cerPath]];
     }
 
@@ -133,11 +144,13 @@ RCT_EXPORT_METHOD(fetch:(NSString *)url obj:(NSDictionary *)obj callback:(RCTRes
                 NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
                 NSInteger statusCode = httpResp.statusCode;
                 NSString *bodyString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSString *statusText = [NSHTTPURLResponse localizedStringForStatusCode:httpResponse.statusCode];
 
                 NSDictionary *res = @{
                                       @"status": @(statusCode),
                                       @"headers": httpResp.allHeaderFields,
-                                      @"bodyString": bodyString
+                                      @"bodyString": bodyString,
+                                      @"statusText": statusText
                                       };
                 callback(@[[NSNull null], res]);
             });
