@@ -144,7 +144,7 @@ RCT_EXPORT_METHOD(fetch:(NSString *)url obj:(NSDictionary *)obj callback:(RCTRes
                 NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
                 NSInteger statusCode = httpResp.statusCode;
                 NSString *bodyString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSString *statusText = [NSHTTPURLResponse localizedStringForStatusCode:httpResponse.statusCode];
+                NSString *statusText = [NSHTTPURLResponse localizedStringForStatusCode:httpResp.statusCode];
 
                 NSDictionary *res = @{
                                       @"status": @(statusCode),
